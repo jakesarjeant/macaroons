@@ -1,0 +1,9 @@
+[package]
+name = "macaroons"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+crypto-common = "0.1.6"
+generic-array = "0.14"
+hmac = "0.12.1"
