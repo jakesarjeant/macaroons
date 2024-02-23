@@ -3,12 +3,12 @@
 	<p>
 		<a href="https://docs.rs/rustmacaroon">docs.rs</a> |
 		<a href="https://crates.io/crates/rustmacaroon">crates.io</a> |
-		<a href="https://github.com/jakesarjeant/rustmacaroon">github.com</a>
+		<a href="https://github.com/jakesarjeant/macaroons">github.com</a>
 	</p>
 	<p>
-	<img alt="License: AGPL-3.0-or-later" src="https://img.shields.io/github/license/jakesarjeant/rustmacaroon?color=orange&style=for-the-badge" />
-	<img alt="Latest release" src="https://img.shields.io/github/v/release/jakesarjeant/rustmacaroon?color=yellow&style=for-the-badge" />
-	<img alt="Github issue counter" src="https://img.shields.io/github/issues/jakesarjeant/rustmacaroon?style=for-the-badge" />
+	<img alt="License: BSD 3-clause" src="https://img.shields.io/github/license/jakesarjeant/macaroons?color=orange&style=for-the-badge" />
+	<img alt="Latest release" src="https://img.shields.io/crates/v/rustmacaroon?color=yellow&style=for-the-badge" />
+	<img alt="Github issue counter" src="https://img.shields.io/github/issues/jakesarjeant/macaroons?style=for-the-badge" />
 	</p>
 </div>
 
