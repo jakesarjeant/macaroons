@@ -1,5 +1,6 @@
 #[cfg(test)]
 mod test;
+mod util;
 
 use std::fmt::Debug;
 
@@ -9,6 +10,7 @@ use hmac::Mac;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use thiserror::Error;
+use util::{as_base64, from_base64};
 
 impl<T> MacHelper for T where T: Mac + KeyInit {}
 /// Helper for computing HMACs more conveniently:
@@ -29,7 +31,7 @@ trait MacHelper: Mac + KeyInit {
 /// Trait implementing the verification logic for a caveat. This trait need only be implemeted on
 /// the server-side. Clients wanting to add their own caveats to tokens don't need this trait.
 pub trait Caveat {
-	type Error: std::error::Error;
+	type Error;
 	type Context;
 
 	/// Verify the caveat. Use the context for any information needed to properly check caveats.
@@ -45,9 +47,14 @@ pub trait Caveat {
 /// To generate a new macaroon on the server side, see [`Macaroon::new`](`Macaroon::new`).
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Macaroon<C, M>(
-	Vec<u8>,
+	String,
 	Vec<C>,
-	#[serde(bound = "")] GenericArray<u8, <M as OutputSizeUser>::OutputSize>,
+	#[serde(
+		bound = "",
+		serialize_with = "as_base64::<M, _>",
+		deserialize_with = "from_base64::<M, _>"
+	)]
+	GenericArray<u8, <M as OutputSizeUser>::OutputSize>,
 )
 where
 	M: OutputSizeUser;
@@ -129,10 +136,8 @@ where
 	/// ```
 	/// use sha2::Sha256;
 	/// use hmac::{Hmac};
-	/// use crypto_common::KeyInit;
-	/// use rand::rngs::OsRng;
 	///
-	/// let key = Hmac<Sha256>::generate_key(&mut OsRng);
+	/// let key = b"mysecretkey";
 	///
 	/// // Note that the token ID ("asdfghjkl" here) should be some (ideally random) byte array or
 	/// // string that uniquely identifies this token.
@@ -170,10 +175,14 @@ where
 	/// ```
 	pub fn new<T, K>(id: T, key: K) -> Self
 	where
-		T: AsRef<[u8]>,
+		T: AsRef<str>,
 		K: AsRef<[u8]>,
 	{
-		Macaroon(Vec::from(id.as_ref()), Vec::new(), M::process(key, id))
+		Macaroon(
+			String::from(id.as_ref()),
+			Vec::new(),
+			M::process(key, id.as_ref()),
+		)
 	}
 
 	/// Check the signature and verify every caveat. See the documentation of
@@ -182,7 +191,7 @@ where
 	where
 		K: AsRef<[u8]>,
 	{
-		let expected_signature = std::iter::once(self.0.clone())
+		let expected_signature = std::iter::once(self.0.as_bytes().to_vec())
 			.chain(
 				self.1
 					.iter()

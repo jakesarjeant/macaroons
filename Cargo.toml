@@ -1,5 +1,5 @@
 [package]
-name = "macaroons"
+name = "rustmacaroon"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,6 +7,7 @@ edition = "2021"
 doctest = false
 
 [dependencies]
+base64 = "0.21.7"
 canonical_json = "0.5.0"
 crypto-common = { version = "0.1.6", features = ["rand_core"] }
 generic-array = { version = "0.14.7", features = ["serde"] }
