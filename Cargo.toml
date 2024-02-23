@@ -1,8 +1,9 @@
 [package]
 name = "rustmacaroon"
 description = "A more rusty implementation of Macaroons"
+repository = "https://github.com/jakesarjeant/macaroons"
 license-file = "LICENSE"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 
 [lib]
